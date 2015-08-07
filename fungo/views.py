@@ -8,5 +8,7 @@ def index (request):
     return render(request, 'fungo/index.html', context_dict)
 
 def about (request):
-    return HttpResponse(
-"Fungo says here is about page! <a href='/fungo/'>Go back to main page</a>.")
+    return render(request, 'fungo/about.html')
+
+#     return HttpResponse(
+# "Fungo says here is about page! <a href='/fungo/'>Go back to main page</a>.")
