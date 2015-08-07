@@ -1,15 +1,25 @@
 <!DOCTYPE html>
-{% load staticfiles %}
 <html>
-  <head>
-    <title>Fungo</title>
-  </head>
-  <body>
-    <h1>Fungo says&hellip;</h1>
-    <p>Hello World! <b>{{ boldmessage }}</b></p>
-    <p><a href="/fungo/about/">About</a><br/></p>
-    <p>
-      <img src="{% static "images/the-cat.jpg" %}" alt="Picture of the Day"/>
-    </p>
-  </body>
+    <head>
+        <title>Fungo</title>
+    </head>
+
+    <body>
+        <h1>Fungo says&hellip;</h1>
+
+        {% if categories %}
+            <ul>
+                {% for category in categories %}
+                <li>
+                  <a href="/fungo/category/{{ category.slug }}">
+                    {{ category.name }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <b>There are no categories present.</b>
+        {% endif %}
+
+        <a href="/fungo/about/">About</a>
+    </body>
 </html>
