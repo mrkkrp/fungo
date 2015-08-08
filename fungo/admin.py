@@ -14,3 +14,4 @@ class PageAdmin(admin.ModelAdmin):
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Page, PageAdmin)
 admin.site.register(UserProfile)
+admin.site.site_header = 'Fungo Überness…'

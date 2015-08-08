@@ -1,8 +1,10 @@
+from django.contrib.auth import authenticate, login
+from django.core.urlresolvers import reverse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
-from django.http import HttpResponse
 
-from fungo.models import Category, Page
 from fungo.forms import CategoryForm, PageForm, UserForm, UserProfileForm
+from fungo.models import Category, Page
 
 # Views
 
@@ -96,8 +98,8 @@ def add_page(request, category_name_url):
                 page.category = cat
                 page.views = 0
                 page.save()
-                # probably better to use a redirect here.
-                return category(request, category_name_url)
+                return HttpResponseRedirect(
+                    reverse('category', args=[category_name_url]))
         else:
             print(form.errors)
     else:
@@ -167,3 +169,40 @@ def register(request):
                   { 'user_form':    user_form,
                     'profile_form': profile_form,
                     'registered':   registered })
+
+def user_login(request):
+
+    # If the request is a HTTP POST, try to pull out the relevant
+    # information.
+    if request.method == 'POST':
+
+        # Gather the username and password provided by the user. This
+        # information is obtained from the login form.
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        # Use Django's machinery to attempt to see if the username/password
+        # combination is valid — a User object is returned if it is.
+        user = authenticate(username=username, password=password)
+
+        if user:
+            # Is the account active? It could have been disabled.
+            if user.is_active:
+                # If the account is valid and active, we can log the user
+                # in. We'll send the user back to the homepage.
+                login(request, user)
+                return HttpResponseRedirect(reverse('index'))
+            else:
+                # An inactive account was used — no logging in!
+                return HttpResponse("Your Fungo account is disabled.")
+        else:
+            # Bad login details were provided. So we can't log the user in.
+            print("Invalid login details: {0}, {1}".format(username, password))
+            return HttpResponse("Invalid login details supplied.")
+
+    # The request is not a HTTP POST, so display the login form. This
+    # scenario would most likely be a HTTP GET.
+    else:
+        # No context variables to pass to the template system, hence the
+        # blank dictionary object…
+        return render(request, 'fungo/login.html', {})
