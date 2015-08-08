@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Fungo</title>
+  </head>
+
+  <body>
+    <h1>Register with Fungo</h1>
+
+    {% if registered %}
+    Fungo says: <b>thank you for registering!</b>
+    <a href="{% url 'index' %}">Return to the homepage.</a><br />
+    {% else %}
+    Fungo says: <b>register here!</b><br />
+
+    <form id="user_form" method="post" action="{% url 'register' %}"
+          enctype="multipart/form-data">
+
+      {% csrf_token %}
+
+      {{ user_form.as_p }}
+      {{ profile_form.as_p }}
+
+      <input type="submit" name="submit" value="Register" />
+    </form>
+    {% endif %}
+  </body>
+</html>
