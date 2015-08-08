@@ -1,24 +1,25 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Rango</title>
-    </head>
+  <head>
+    <title>Rango</title>
+  </head>
 
-    <body>
-        <h1>{{ category_name }}</h1>
-        {% if category %}
-            {% if pages %}
-            <ul>
-                {% for page in pages %}
-                <li><a href="{{ page.url }}">{{ page.title }}</a></li>
-                {% endfor %}
-            </ul>
-            {% else %}
-                <b>No pages currently in category.</b>
-            {% endif %}
-                <a href="/fungo/add_page/{{ category.slug }}">Add Page!</a>
-        {% else %}
-            The specified category {{ category_name }} does not exist!
-        {% endif %}
-    </body>
+  <body>
+    <h1>{{ category_name }}</h1>
+    {% if category %}
+    {% if pages %}
+    <ul>
+      {% for page in pages %}
+      <li><a href="{{ page.url }}">{{ page.title }}</a></li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <b>No pages currently in category.</b>
+    {% endif %}
+    <a href="{% url 'add_page' category.slug %}">Add Page!</a>
+    {% else %}
+    The specified category {{ category_name }} does not exist!
+    {% endif %}
+    <a href="{% url 'index' %}">Go Back.</a>
+  </body>
 </html>

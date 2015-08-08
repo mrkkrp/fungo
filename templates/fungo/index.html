@@ -11,8 +11,7 @@
     <ul>
       {% for category in categories %}
       <li>
-        <a href="/fungo/category/{{ category.slug }}">
-          {{ category.name }}</a>
+        <a href="{% url 'category' category.slug %}">{{ category.name }}</a>
       </li>
       {% endfor %}
     </ul>
@@ -20,7 +19,7 @@
     <b>There are no categories present.</b>
     {% endif %}
 
-    <a href="/fungo/add_category/">Add a New Category</a><br/>
-    <a href="/fungo/about/">About</a>
+    <a href="{% url 'add_category' %}">Add a New Category</a><br/>
+    <a href="{% url 'about' %}">About</a>
   </body>
 </html>
