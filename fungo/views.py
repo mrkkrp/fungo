@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 
 from fungo.models import Category, Page
+from fungo.forms import CategoryForm, PageForm
 
 # Views
 
@@ -55,3 +56,53 @@ def about (request):
 
 #     return HttpResponse(
 # "Fungo says here is about page! <a href='/fungo/'>Go back to main page</a>.")
+
+def add_category(request):
+    # An http POST?
+    if request.method == 'POST':
+        form = CategoryForm(request.POST)
+
+        # Have we been provided with a valid form?
+        if form.is_valid():
+            # Save the new category to the database.
+            form.save(commit=True)
+
+            # Now call the index() view. User will be shown the homepage.
+            return index(request)
+        else:
+            # The supplied form contains errors — just print them in the
+            # terminal.
+            print(form.errors)
+    else:
+        # If the request was not a POST, display the form to enter details.
+        form = CategoryForm()
+
+    # Bad form (or form details), no form supplied… Render the form with
+    # error messages (if any).
+    return render(request, 'fungo/add_category.html', {'form': form})
+
+def add_page(request, category_name_url):
+
+    try:
+        cat = Category.objects.get(slug=category_name_url)
+    except Category.DoesNotExist:
+        cat = None
+
+    if request.method == 'POST':
+        form = PageForm(request.POST)
+        if form.is_valid():
+            if cat:
+                page = form.save(commit=False)
+                page.category = cat
+                page.views = 0
+                page.save()
+                # probably better to use a redirect here.
+                return category(request, category_name_url)
+        else:
+            print(form.errors)
+    else:
+        form = PageForm()
+
+    context_dict = {'form': form, 'category': cat}
+
+    return render(request, 'fungo/add_page.html', context_dict)

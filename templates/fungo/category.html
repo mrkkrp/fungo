@@ -16,6 +16,7 @@
             {% else %}
                 <b>No pages currently in category.</b>
             {% endif %}
+                <a href="/fungo/add_page/{{ category.slug }}">Add Page!</a>
         {% else %}
             The specified category {{ category_name }} does not exist!
         {% endif %}

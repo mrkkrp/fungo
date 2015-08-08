@@ -1,25 +1,26 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Fungo</title>
-    </head>
+  <head>
+    <title>Fungo</title>
+  </head>
 
-    <body>
-        <h1>Fungo says&hellip;</h1>
+  <body>
+    <h1>Fungo says&hellip;</h1>
 
-        {% if categories %}
-            <ul>
-                {% for category in categories %}
-                <li>
-                  <a href="/fungo/category/{{ category.slug }}">
-                    {{ category.name }}</a>
-                </li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <b>There are no categories present.</b>
-        {% endif %}
+    {% if categories %}
+    <ul>
+      {% for category in categories %}
+      <li>
+        <a href="/fungo/category/{{ category.slug }}">
+          {{ category.name }}</a>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <b>There are no categories present.</b>
+    {% endif %}
 
-        <a href="/fungo/about/">About</a>
-    </body>
+    <a href="/fungo/add_category/">Add a New Category</a><br/>
+    <a href="/fungo/about/">About</a>
+  </body>
 </html>
