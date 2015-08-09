@@ -118,4 +118,4 @@ MEDIA_URL = '/media/'
 
 # Login
 
-LOGIN_URL = '/fungo/login/' # FIXME
+LOGIN_URL = '/fungo/login/' # FIXME use 'reverse' here somehow

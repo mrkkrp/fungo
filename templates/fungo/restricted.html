@@ -1,0 +1,17 @@
+{% extends 'fungo/base.html' %}
+{% load staticfiles %}
+{% block title %}
+  Restricted Page
+{% endblock title %}
+
+{% block content %}
+
+<p>
+  Since you're logged in, you can see this text!
+</p>
+
+{% endblock content %}
+
+{% block restricted %}
+<!-- No need to for 'Restricted Page' link here. -->
+{% endblock restricted %}

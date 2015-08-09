@@ -1,28 +1,29 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Fungo</title>
-  </head>
+{% extends 'fungo/base.html' %}
+{% load staticfiles %}
+{% block title %}
+  Registration
+{% endblock title %}
 
-  <body>
-    <h1>Register with Fungo</h1>
+{% block content %}
 
-    {% if registered %}
-    Fungo says: <b>thank you for registering!</b>
-    <a href="{% url 'index' %}">Return to the homepage.</a><br />
-    {% else %}
-    Fungo says: <b>register here!</b><br />
+{% if registered %}
+<p>
+  Thank you for registering!
+</p>
+{% else %}
+<form id="user_form" method="post" action="{% url 'register' %}"
+      enctype="multipart/form-data">
+  {% csrf_token %}
 
-    <form id="user_form" method="post" action="{% url 'register' %}"
-          enctype="multipart/form-data">
+  {{ user_form.as_p }}
+  {{ profile_form.as_p }}
 
-      {% csrf_token %}
+  <input type="submit" name="submit" value="Register" />
+</form>
+{% endif %}
 
-      {{ user_form.as_p }}
-      {{ profile_form.as_p }}
+{% endblock content %}
 
-      <input type="submit" name="submit" value="Register" />
-    </form>
-    {% endif %}
-  </body>
-</html>
+{% block register %}
+<!-- Omit registration link on this page. -->
+{% endblock register %}

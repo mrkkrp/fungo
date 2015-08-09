@@ -208,6 +208,7 @@ def user_login(request):
     else:
         # No context variables to pass to the template system, hence the
         # blank dictionary object…
+        # TODO Can we use forms here instead of hardcoded fields?
         return render(request, 'fungo/login.html', {})
 
 @login_required
@@ -220,4 +221,4 @@ def user_logout(request):
 
 @login_required
 def restricted(request):
-    return HttpResponse("Since you're logged in, you can see this text!")
+    return render(request, 'fungo/restricted.html', {})

@@ -1,28 +1,23 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Fungo</title>
-  </head>
+{% extends 'fungo/base.html' %}
+{% load staticfiles %}
+{% block title %}Add Page{% endblock title %}
 
-  <body>
-    <h1>Add a Page</h1>
+{% block content %}
 
-    <form id="page_form" method="post"
-          action="{% url 'add_page' category.slug %}">
+<form id="page_form" method="post" action="{% url 'add_page' category.slug %}">
 
-      {% csrf_token %}
-      {% for hidden in form.hidden_fields %}
-      {{ hidden }}
-      {% endfor %}
+  {% csrf_token %}
+  {% for hidden in form.hidden_fields %}
+  {{ hidden }}
+  {% endfor %}
 
-      {% for field in form.visible_fields %}
-      {{ field.errors }}
-      {{ field.help_text }}
-      {{ field }}
-      {% endfor %}
+  {% for field in form.visible_fields %}
+  {{ field.errors }}
+  {{ field.help_text }}
+  <p>{{ field }}</p>
+  {% endfor %}
 
-      <input type="submit" name="submit" value="Create Page" />
-    </form>
-  </body>
+  <input type="submit" name="submit" value="Create Page" />
+</form>
 
-</html>
+{% endblock content %}

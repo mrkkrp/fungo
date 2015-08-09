@@ -1,0 +1,50 @@
+{% load kwacros %}
+
+{% kwacro title %}
+  {% block title %}FIXME{% endblock title %}
+{% endkwacro title %}
+
+<!DOCTYPE html>
+
+<html>
+  <head lang="en">
+    <meta charset="UTF-8" />
+    <title>Fungo | {% usekwacro title %}</title>
+  </head>
+
+  <body>
+    <h1><a href="{% url 'index' %}">Fungo</a> &mdash; {% usekwacro title %}</h1>
+    <div>
+      {% block content %}
+      <b>FIXME, I'm stripped!</b>
+      {% endblock content %}
+    </div>
+    <hr />
+
+    <div>
+      <ul>
+        {% if user.is_authenticated %}
+        <li>Logged in as <b>{{ user.username }}</b></li>
+        {% block add_category %}
+          <li><a href="{% url 'add_category' %}">Add Category</a></li>
+        {% endblock add_category %}
+        {% block extra_actions %}
+          <!-- No extra actions for this page. -->
+        {% endblock extra_actions %}
+        {% block restricted %}
+          <li><a href="{% url 'restricted' %}">Restricted Page</a></li>
+        {% endblock restricted %}
+        <li><a href="{% url 'logout' %}">Logout</a></li>
+        {% else %}
+        {% block register %}
+          <li><a href="{% url 'register' %}">Register Here</a></li>
+        {% endblock register %}
+        <li><a href="{% url 'login' %}">Login</a></li>
+        {% endif %}
+        {% block about %}
+          <li><a href="{% url 'about' %}">About</a></li>
+        {% endblock about %}
+      </ul>
+    </div>
+  </body>
+</html>

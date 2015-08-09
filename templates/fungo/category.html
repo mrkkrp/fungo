@@ -1,27 +1,41 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Rango</title>
-  </head>
+{% extends 'fungo/base.html' %}
+{% load staticfiles %}
+{% block title %}
+  {% if category %}
+    {{ category_name }}
+  {% else %}
+    Missing Category!
+  {% endif %}
+{% endblock title %}
 
-  <body>
-    <h1>{{ category_name }}</h1>
-    {% if category %}
-    {% if pages %}
-    <ul>
-      {% for page in pages %}
-      <li><a href="{{ page.url }}">{{ page.title }}</a></li>
-      {% endfor %}
-    </ul>
-    {% else %}
-    <b>No pages currently in category.</b>
-    {% endif %}
-    {% if user.is_authenticated %}
-    <a href="{% url 'add_page' category.slug %}">Add Page!</a><br />
-    {% endif %}
-    {% else %}
-    The specified category {{ category_name }} does not exist!
-    {% endif %}
-    <a href="{% url 'index' %}">Go Back.</a>
-  </body>
-</html>
+{% block content %}
+
+{% if category %}
+
+  {% if pages %}
+  <ul>
+    {% for page in pages %}
+    <li><a href="{{ page.url }}">{{ page.title }}</a></li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  No pages currently in category.
+  {% endif %}
+
+  {% if user.is_authenticated %}
+
+  {% endif %}
+
+{% else %}
+
+  The specified category does not exist.
+
+{% endif %}
+
+{% endblock content %}
+
+{% block extra_actions %}
+  {% if category %}
+    <li><a href="{% url 'add_page' category.slug %}">Add Page</a></li>
+  {% endif %}
+{% endblock extra_actions %}

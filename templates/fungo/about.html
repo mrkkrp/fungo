@@ -1,14 +1,17 @@
-<!DOCTYPE html>
+{% extends 'fungo/base.html' %}
 {% load staticfiles %}
-<html>
-  <head>
-    <title>About Fungo</title>
-  </head>
-  <body>
-    <h1>About Page</h1>
-    <p>
-      <img src="{% static 'images/the-cat.jpg' %}" alt="That's It!"/>
-    </p>
-    <a href="{% url 'index' %}">Go to Index Page.</a>
-  </body>
-</html>
+{% block title %}
+  About
+{% endblock title %}
+
+{% block content %}
+
+<p>
+  <img src="{% static 'images/the-cat.jpg' %}" alt="That's It!"/>
+</p>
+
+{% endblock content %}
+
+{% block about %}
+<!-- Omit link to 'About' page this time. -->
+{% endblock about %}
