@@ -1,7 +1,8 @@
-from django.contrib.auth import authenticate, login
-from django.core.urlresolvers import reverse
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.contrib.auth            import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers       import reverse
+from django.http                    import HttpResponse, HttpResponseRedirect
+from django.shortcuts               import render
 
 from fungo.forms import CategoryForm, PageForm, UserForm, UserProfileForm
 from fungo.models import Category, Page
@@ -59,6 +60,7 @@ def about (request):
 #     return HttpResponse(
 # "Fungo says here is about page! <a href='/fungo/'>Go back to main page</a>.")
 
+@login_required
 def add_category(request):
     # An http POST?
     if request.method == 'POST':
@@ -83,6 +85,7 @@ def add_category(request):
     # error messages (if any).
     return render(request, 'fungo/add_category.html', {'form': form})
 
+@login_required
 def add_page(request, category_name_url):
 
     try:
@@ -206,3 +209,15 @@ def user_login(request):
         # No context variables to pass to the template system, hence the
         # blank dictionary object…
         return render(request, 'fungo/login.html', {})
+
+@login_required
+def user_logout(request):
+    # Since we know that the user is logged in, we can just log him out.
+    logout(request)
+
+    # Take the user back to homepage.
+    return HttpResponseRedirect(reverse('index'))
+
+@login_required
+def restricted(request):
+    return HttpResponse("Since you're logged in, you can see this text!")
