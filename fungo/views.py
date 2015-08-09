@@ -7,6 +7,8 @@ from django.shortcuts               import render
 from fungo.forms import CategoryForm, PageForm, UserForm, UserProfileForm
 from fungo.models import Category, Page
 
+from datetime import datetime
+
 # Views
 
 def index (request):
@@ -17,8 +19,33 @@ def index (request):
     # to the template engine.
     category_list = Category.objects.order_by('-likes')[:5]
     # ↑ how to query on database level, not on Python level?
-    context_dict = {'categories': category_list}
-    # Render the response and send it back!
+    page_list = Page.objects.order_by('-views')[:5]
+
+    context_dict = {'categories': category_list, 'pages': page_list}
+
+    # Get the number of visits to the site. We use the COOKIES.get()
+    # function to obtain the visits cookie. If the cookie exists, the value
+    # returned is casted to an integer. If the cookie doesn't exist, we
+    # default to 1 and cast that.
+    visits = request.session.get('visits', 1)
+    reset_last_visit_time = False
+
+    last_visit = request.session.get('last_visit')
+    if last_visit:
+        last_visit_time = datetime.strptime(last_visit[:-7], "%Y-%m-%d %H:%M:%S")
+
+        if (datetime.now() - last_visit_time).days > 0:
+            visits += 1
+            reset_last_visit_time = True
+    else:
+        reset_last_visit_time = True
+
+    if reset_last_visit_time:
+        request.session['last_visit'] = str(datetime.now())
+        request.session['visits'] = visits
+
+    context_dict['visits'] = visits
+
     return render(request, 'fungo/index.html', context_dict)
 
 def category(request, category_name_url):
@@ -55,10 +82,8 @@ def category(request, category_name_url):
     return render(request, 'fungo/category.html', context_dict)
 
 def about (request):
-    return render(request, 'fungo/about.html')
-
-#     return HttpResponse(
-# "Fungo says here is about page! <a href='/fungo/'>Go back to main page</a>.")
+    count = request.session.get('visits', 1)
+    return render(request, 'fungo/about.html', {'visits': count})
 
 @login_required
 def add_category(request):
