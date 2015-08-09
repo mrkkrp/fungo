@@ -1,0 +1,21 @@
+{% extends 'fungo/base.html' %}
+{% load staticfiles %}
+{% block title %}
+  Registration
+{% endblock title %}
+
+{% block content %}
+
+<form method="post" action=".">
+
+  {% csrf_token %}
+  {{ form.as_p }}
+
+  <input type="submit" name="submit" value="Register" />
+</form>
+
+{% endblock content %}
+
+{% block register %}
+<!-- Omit registration link on this page. -->
+{% endblock register %}

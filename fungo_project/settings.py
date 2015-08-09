@@ -37,7 +37,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'fungo'
+    'fungo',
+    'registration',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -116,6 +117,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 MEDIA_URL = '/media/'
 
-# Login
+# Registration
 
-LOGIN_URL = '/fungo/login/' # FIXME use 'reverse' here somehow
+REGISTRATION_OPEN = True # If True, users can register.
+ACOUNT_ACTIVATION_DAYS = 7 # One week activation window.
+REGISTRATION_AUTO_LOGIN = True # User will be automatically logged in.
+LOGIN_REDIRECT_URL = '/fungo/' # The page to arrive after login.
+LOGIN_URL = '/accounts/login/' # FIXME use 'reverse' here somehow

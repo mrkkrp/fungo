@@ -34,12 +34,13 @@
         {% block restricted %}
           <li><a href="{% url 'restricted' %}">Restricted Page</a></li>
         {% endblock restricted %}
-        <li><a href="{% url 'logout' %}">Logout</a></li>
+        <li><a href="{% url 'auth_logout' %}?next={% url 'index' %}">
+            Logout</a></li>
         {% else %}
         {% block register %}
-          <li><a href="{% url 'register' %}">Register Here</a></li>
+          <li><a href="{% url 'registration_register' %}">Register Here</a></li>
         {% endblock register %}
-        <li><a href="{% url 'login' %}">Login</a></li>
+        <li><a href="{% url 'auth_login' %}">Login</a></li>
         {% endif %}
         {% block about %}
           <li><a href="{% url 'about' %}">About</a></li>
