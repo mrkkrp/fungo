@@ -6,13 +6,22 @@
 
 {% block content %}
 
-<form method="post" action=".">
-  {% csrf_token %}
-  {{ form.as_p }}
+<link href="{% static 'css/signin.css' %}" rel="stylesheet">
 
-  <input type="submit" value="Go" />
-  <input type="hidden" name="next" value="{{ next }}" />
+<form class="form-signin" role="form" method="post" action=".">
+  {% csrf_token %}
+
+  <input class="form-control" placeholder="Username" id="id_username"
+         maxlength="254" name="username" type="text" required autofocus=""/>
+  <input type="password" class="form-control" placeholder="Password"
+         id="id_password" name="password" type="password" required />
+
+  <button class="btn btn-lg btn-primary btn-block" type="submit"
+          value="Submit">Login</button>
 </form>
+
+<hr />
+
 <p>Not a member? <a href="{% url 'registration_register' %}">Register</a>!</p>
 
 {% endblock content %}
