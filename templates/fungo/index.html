@@ -18,6 +18,7 @@
     <ul class="list-group">
       {% for category in categories %}
       <li class="list-group-item">
+        <span class="badge">{{ category.likes }}</span>
         <a href="{% url 'category' category.slug %}">{{ category.name }}</a>
       </li>
       {% endfor %}
@@ -37,6 +38,7 @@
     <ul class="list-group">
       {% for page in pages %}
       <li class="list-group-item">
+        <span class="badge">{{ page.views }}</span>
         <a href="{{page.url}}">{{ page.title }}</a>
       </li>
       {% endfor %}

@@ -33,7 +33,13 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="{% url 'index' %}">Fungo</a>
+          <a class="navbar-brand" href="{% url 'index' %}">
+             {% if user.is_authenticated %}
+             {{ user.username }}
+             {% else %}
+             Fungo
+             {% endif %}
+          </a>
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
@@ -53,7 +59,7 @@
                 Logout</a></li>
             {% else %}
             {% block register %}
-            <li><a href="{% url 'registration_register' %}">Register Here</a></li>
+            <li><a href="{% url 'registration_register' %}">Register</a></li>
             {% endblock register %}
             <li><a href="{% url 'auth_login' %}">Login</a></li>
             {% endif %}
@@ -80,10 +86,6 @@
              {% block content %}
              <b>FIXME, I'm stripped!</b>
              {% endblock content %}
-             <hr />
-             {% if user.is_authenticated %}
-             <p>Logged in as <b>{{ user.username }}</b></p>
-             {% endif %}
            </div>
         </div>
       </div>
