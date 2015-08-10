@@ -74,9 +74,22 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
+          <ul class="nav nav-list">
+            <li class="nav-header">Find a Category</li>
+            <form>
+              <label></label>
+              <li><input class="search-query span10" type="text"
+                         name="suggestion" value="" id="suggestion" />
+              </li>
+            </form>
+          </ul>
+          <div id="cats">
+          </div>
+          {% comment %}
           {% block side_block %}
           {% get_category_list category %}
           {% endblock side_block %}
+          {% endcomment %}
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
            <div>
@@ -93,7 +106,9 @@
 
     <!-- Bootstrap core JavaScript -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="{% static 'js/bootstrap.min.js'}"></script>
+    <script src="{% static 'js/jquery.js' %}"></script>
+    <script src="{% static 'js/fungo-jquery.js' %}"></script>
+    <script src="{% static 'js/fungo-ajax.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
   </body>
 </html>

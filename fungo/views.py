@@ -247,3 +247,39 @@ def add_page(request, category_name_url):
 @login_required
 def restricted(request):
     return render(request, 'fungo/restricted.html', {})
+
+@login_required
+def like_category(request):
+
+    if request.method != 'GET':
+        return HttpResponse(0)
+
+    cat_id = request.GET['category_id']
+
+    if not cat_id:
+        return HttpResponse(0)
+
+    cat = Category.objects.get(id=int(cat_id))
+
+    if not cat:
+        return HttpResponse(0)
+
+    cat.likes += 1
+    cat.save()
+
+    print("going to return {0}".format(cat.likes))
+
+    return HttpResponse(cat.likes)
+
+def get_category_list(max_results=0, starts_with=''):
+    return Category.objects.filter(
+        name__istartswith=starts_with)[:max_results] if starts_with else []
+
+def suggest_category(request):
+
+    if request.method != 'GET':
+        return HttpResponse()
+
+    cats = get_category_list(3, request.GET['suggestion'])
+
+    return render(request, 'fungo/cats.html', {'cats': cats})
