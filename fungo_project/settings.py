@@ -125,3 +125,5 @@ ACOUNT_ACTIVATION_DAYS = 7 # One week activation window.
 REGISTRATION_AUTO_LOGIN = True # User will be automatically logged in.
 LOGIN_REDIRECT_URL = '/fungo/' # The page to arrive after login.
 LOGIN_URL = '/accounts/login/' # FIXME use 'reverse' here somehow
+
+SITE_ID = 1
