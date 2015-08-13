@@ -271,15 +271,23 @@ def like_category(request):
 
     return HttpResponse(cat.likes)
 
-def get_category_list(max_results=0, starts_with=''):
+def get_category_list(max_results=0, query=''):
     return Category.objects.filter(
-        name__istartswith=starts_with)[:max_results] if starts_with else []
+        name__contains=query).order_by('-views')[:max_results]
 
 def suggest_category(request):
 
     if request.method != 'GET':
         return HttpResponse()
 
-    cats = get_category_list(3, request.GET['suggestion'])
+    cats = get_category_list(5, request.GET['suggestion'])
 
     return render(request, 'fungo/cats.html', {'cats': cats})
+
+def user_page(request, user_name):
+    """
+    Display page describing particular user. If it's page of logged in user,
+    let him edit his account.
+    """
+    # TODO: write me, please
+    return render(request, 'fungo/user_page.html', {'user_name': user_name})

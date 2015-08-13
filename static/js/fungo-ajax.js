@@ -1,3 +1,7 @@
+$(document).ready(function() {
+    lookupSuggestion('');
+});
+
 $('#likes').click(function(){
     var catid;
     catid = $(this).attr('data-catid');
@@ -8,9 +12,11 @@ $('#likes').click(function(){
 });
 
 $('#suggestion').keyup(function (){
-    var query;
-    query = $(this).val()
+    lookupSuggestion($(this).val());
+});
+
+function lookupSuggestion(query) {
     $.get('/fungo/suggest_category', {suggestion: query}, function(data){
         $('#cats').html(data);
     });
-});
+};

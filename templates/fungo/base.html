@@ -34,37 +34,79 @@
             <span class="icon-bar"></span>
           </button>
           <a class="navbar-brand" href="{% url 'index' %}">
-             {% if user.is_authenticated %}
-             {{ user.username }}
-             {% else %}
-             Fungo
-             {% endif %}
+            Fungo
           </a>
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="{% url 'index' %}">Home</a></li>
             {% if user.is_authenticated %}
             {% block add_category %}
-            <li><a href="{% url 'add_category' %}">Add Category</a></li>
+            <li>
+              <a href="{% url 'add_category' %}">
+                <span class="glyphicon glyphicon-plus" title="Add Category">
+                </span>
+              </a>
+            </li>
             {% endblock add_category %}
             {% block extra_actions %}
             <!-- No extra actions for this page. -->
             {% endblock extra_actions %}
             {% block restricted %}
-            <li><a href="{% url 'restricted' %}">Restricted Page</a></li>
+            <li>
+              <a href="{% url 'restricted' %}">
+                <span class="glyphicon glyphicon-sunglasses"
+                      title="Restricted Page">
+                </span>
+              </a>
+            </li>
             {% endblock restricted %}
-            <li><a href="{% url 'auth_password_change' %}">Change Password</a></li>
-            <li><a href="{% url 'auth_logout' %}?next={% url 'index' %}">
-                Logout</a></li>
+            <li>
+              <a href="" id="dropdownMenu1" data-toggle="dropdown"
+                 title="You are {{ user.username }}">
+                {{ user.username }}
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                <li>
+                  <a href="{% url 'user_page' user.username %}">
+                    My Profile
+                  </a>
+                </li>
+                <li>
+                  <a href="{% url 'auth_password_change' %}">
+                    Change Password
+                  </a>
+                </li>
+                <li role="separator" class="divider"></li>
+                <li>
+                  <a href="{% url 'auth_logout' %}?next={% url 'index' %}">
+                    Logout
+                  </a>
+                </li>
+              </ul>
+            </li>
             {% else %}
             {% block register %}
-            <li><a href="{% url 'registration_register' %}">Register</a></li>
+            <li>
+              <a href="{% url 'registration_register' %}">
+                <span class="glyphicon glyphicon-user" title="Register">
+                </span>
+              </a>
+            </li>
             {% endblock register %}
-            <li><a href="{% url 'auth_login' %}">Login</a></li>
+            <li><a href="{% url 'auth_login' %}">
+                <span class="glyphicon glyphicon-off" title="Login">
+                </span>
+              </a>
+            </li>
             {% endif %}
             {% block about %}
-            <li><a href="{% url 'about' %}">About</a></li>
+            <li>
+              <a href="{% url 'about' %}">
+                <span class="glyphicon glyphicon-question-sign"
+                      title="About">
+                </span>
+              </a>
+            </li>
             {% endblock about %}
           </ul>
         </div>
@@ -74,15 +116,12 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
-          <ul class="nav nav-list">
-            <li class="nav-header">Find a Category</li>
-            <form>
-              <label></label>
-              <li><input class="search-query span10" type="text"
-                         name="suggestion" value="" id="suggestion" />
-              </li>
-            </form>
-          </ul>
+          <div class="input-group">
+            <input type="text" class="form-control"
+                   placeholder="Search Categories"
+                   aria-describedby="basic-addon2"
+                   id="suggestion">
+          </div>
           <div id="cats">
           </div>
           {% comment %}
@@ -92,21 +131,25 @@
           {% endcomment %}
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-           <div>
-             <div class="page-header">
-               <h1>{% usekwacro title %}</h1>
-             </div>
-             {% block content %}
-             <b>FIXME, I'm stripped!</b>
-             {% endblock content %}
-           </div>
+          <div>
+            <div class="page-header">
+              <h1>
+                {% usekwacro title %}
+                {% block title_stuff %}
+                {% endblock title_stuff %}
+              </h1>
+            </div>
+            {% block content %}
+            <b>FIXME, I'm stripped!</b>
+            {% endblock content %}
+          </div>
         </div>
       </div>
     </div>
 
     <!-- Bootstrap core JavaScript -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="{% static 'js/jquery.js' %}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="{% static 'js/fungo-jquery.js' %}"></script>
     <script src="{% static 'js/fungo-ajax.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>

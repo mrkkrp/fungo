@@ -8,6 +8,23 @@
   {% endif %}
 {% endblock title %}
 
+{% block title_stuff %}
+<span class="badge" id="like_count">{{ category.likes }}</span>
+
+{% if user.is_authenticated %}
+  <button id="likes" data-catid="{{category.id}}" title="Like"
+          class="btn btn-primary" type="button">
+    <span class="glyphicon glyphicon-star"></span>
+  </button>
+  <form action="{% url 'add_page' category.slug %}" style="display:inline">
+    <button id="add_page" class="btn btn-primary"
+            type="submit" title="Add Page">
+      <span class="glyphicon glyphicon-plus"></span>
+    </button>
+  </form>
+{% endif %}
+{% endblock title_stuff %}
+
 {% block content %}
 
 {% if category %}
@@ -35,24 +52,4 @@
 
 {% endif %}
 
-<p>
-
-<strong id="like_count">{{ category.likes }}</strong> people like this category
-
-{% if user.is_authenticated %}
-<button id="likes" data-catid="{{category.id}}"
-        class="btn btn-primary" type="button">
-  <span class="glyphicon glyphicon-thumbs-up"></span>
-  Like
-</button>
-{% endif %}
-
-</p>
-
 {% endblock content %}
-
-{% block extra_actions %}
-  {% if category %}
-    <li><a href="{% url 'add_page' category.slug %}">Add Page</a></li>
-  {% endif %}
-{% endblock extra_actions %}

@@ -1,13 +1,11 @@
 {% extends 'fungo/base.html' %}
 {% load staticfiles %}
 {% block title %}
-  Restricted Page
+  {{ user_name }}
 {% endblock title %}
 
 {% block content %}
 
-<p>
-  Since you're logged in, you can see this text!
-</p>
+<p>Info about {{ user_name }} coming soon&hellip;</p>
 
 {% endblock content %}
