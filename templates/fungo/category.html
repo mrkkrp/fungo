@@ -12,10 +12,13 @@
 <span class="badge" id="like_count">{{ category.likes }}</span>
 
 {% if user.is_authenticated %}
+
+  {% if can_like %}
   <button id="likes" data-catid="{{category.id}}" title="Like"
           class="btn btn-primary" type="button">
     <span class="glyphicon glyphicon-star"></span>
   </button>
+  {% endif %}
   <form action="{% url 'add_page' category.slug %}" style="display:inline">
     <button id="add_page" class="btn btn-primary"
             type="submit" title="Add Page">
@@ -40,10 +43,6 @@
   </ul>
   {% else %}
   No pages currently in category.
-  {% endif %}
-
-  {% if user.is_authenticated %}
-
   {% endif %}
 
 {% else %}

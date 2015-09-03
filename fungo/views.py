@@ -59,12 +59,12 @@ def category(request, category_name_url):
         # Can we find a category name slug with the given name? If we can't,
         # the .get() method raises a ‘DoesNotExist’ exception. So the .get()
         # method returns one model instance or raises an exception.
-        category = Category.objects.get(slug=category_name_url)
-        context_dict['category_name'] = category.name
+        cat = Category.objects.get(slug=category_name_url)
+        context_dict['category_name'] = cat.name
 
         # Retrieve all of the associated pages. Note that filter returns >=
         # 1 model instance.
-        pages = Page.objects.filter(category=category)
+        pages = Page.objects.filter(category=cat)
 
         # Add our result list to the template context under name pages.
         context_dict['pages'] = pages
@@ -72,7 +72,13 @@ def category(request, category_name_url):
         # We also add the category object from the database to the context
         # dictionary. We'll use this in the template to verify that the
         # category exists.
-        context_dict['category'] = category
+        context_dict['category'] = cat
+
+        if request.user.is_authenticated:
+            context_dict['can_like'] = request.user not in cat.voters.all()
+        else:
+            context_dict['can_like'] = False
+
     except Category.DoesNotExist:
         # We get here if we didn't find the specified category. Don't do
         # anything - the template displays the "no category" message for us.
@@ -264,10 +270,10 @@ def like_category(request):
     if not cat:
         return HttpResponse(0)
 
-    cat.likes += 1
-    cat.save()
-
-    print("going to return {0}".format(cat.likes))
+    if request.user not in cat.voters.all():
+        cat.likes += 1
+        cat.save()
+        cat.voters.add(request.user)
 
     return HttpResponse(cat.likes)
 
