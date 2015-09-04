@@ -37,7 +37,7 @@
     {% for page in pages %}
     <li class="list-group-item">
       <span class="badge">{{ page.views }}</span>
-      <a href="{{ page.url }}">{{ page.title }}</a>
+      <a href="{% url 'goto' %}?page_id={{ page.id }}">{{ page.title }}</a>
     </li>
     {% endfor %}
   </ul>

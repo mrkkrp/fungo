@@ -5,7 +5,7 @@ urlpatterns = [
     url(r'^$',         views.index, name='index'),
     url(r'^category/(?P<category_name_url>[\w\-]+)/$',
         views.category, name='category'),
-    url(r'^about/',    views.about, name='about'),
+    url(r'^about/$',    views.about, name='about'),
     url(r'^add_category/$', views.add_category, name='add_category'),
     url(r'^add_page/(?P<category_name_url>[\w\-]+)/$',
         views.add_page, name='add_page'),
@@ -15,5 +15,6 @@ urlpatterns = [
     # url(r'^logout/$', views.user_logout, name='logout'),
     url(r'^like_category/$', views.like_category, name='like_category'),
     url(r'^suggest_category/$', views.suggest_category, name='suggest_category'),
-    url(r'^user/(?P<user_name>[\w\-]+)/$', views.user_page, name='user_page')
+    url(r'^user/(?P<user_name>[\w\-]+)/$', views.user_page, name='user_page'),
+    url(r'^goto/$', views.track_url, name='goto'),
 ]

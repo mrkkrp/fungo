@@ -1,8 +1,9 @@
 from django.contrib.auth            import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers       import reverse
-from django.http                    import HttpResponse, HttpResponseRedirect
-from django.shortcuts               import render
+from django.http                    import HttpResponse
+from django.shortcuts               import render, redirect
+from django.views.decorators.http   import require_GET
 
 from fungo.forms import CategoryForm, PageForm, UserForm, UserProfileForm
 from fungo.models import Category, Page
@@ -64,7 +65,7 @@ def category(request, category_name_url):
 
         # Retrieve all of the associated pages. Note that filter returns >=
         # 1 model instance.
-        pages = Page.objects.filter(category=cat)
+        pages = Page.objects.filter(category=cat).order_by('-views')
 
         # Add our result list to the template context under name pages.
         context_dict['pages'] = pages
@@ -78,6 +79,9 @@ def category(request, category_name_url):
             context_dict['can_like'] = request.user not in cat.voters.all()
         else:
             context_dict['can_like'] = False
+
+        cat.views += 1;
+        cat.save()
 
     except Category.DoesNotExist:
         # We get here if we didn't find the specified category. Don't do
@@ -132,8 +136,7 @@ def add_page(request, category_name_url):
                 page.category = cat
                 page.views = 0
                 page.save()
-                return HttpResponseRedirect(
-                    reverse('category', args=[category_name_url]))
+                return redirect(reverse('category', args=[category_name_url]))
         else:
             print(form.errors)
     else:
@@ -225,7 +228,7 @@ def add_page(request, category_name_url):
 #                 # If the account is valid and active, we can log the user
 #                 # in. We'll send the user back to the homepage.
 #                 login(request, user)
-#                 return HttpResponseRedirect(reverse('index'))
+#                 return redirect(reverse('index'))
 #             else:
 #                 # An inactive account was used — no logging in!
 #                 return HttpResponse("Your Fungo account is disabled.")
@@ -248,7 +251,7 @@ def add_page(request, category_name_url):
 #     logout(request)
 
 #     # Take the user back to homepage.
-#     return HttpResponseRedirect(reverse('index'))
+#     return redirect(reverse('index'))
 
 @login_required
 def restricted(request):
@@ -297,3 +300,18 @@ def user_page(request, user_name):
     """
     # TODO: write me, please
     return render(request, 'fungo/user_page.html', {'user_name': user_name})
+
+@require_GET
+def track_url(request):
+    page_id = request.GET.get('page_id')
+
+    if page_id:
+        try:
+            page = Page.objects.get(id=page_id)
+            page.views += 1
+            page.save()
+            return redirect(page.url)
+        except (Page.DoesNotExist, MultipleObjectsReturned):
+            pass
+    else:
+        return redirect(reverse('index'))
