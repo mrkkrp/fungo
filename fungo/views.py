@@ -1,12 +1,12 @@
 from django.contrib.auth            import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers       import reverse
-from django.http                    import HttpResponse
+from django.http                    import HttpResponse, Http404
 from django.shortcuts               import render, redirect
 from django.views.decorators.http   import require_GET
 
-from fungo.forms import CategoryForm, PageForm, UserForm, UserProfileForm
-from fungo.models import Category, Page
+from fungo.forms import CategoryForm, PageForm
+from fungo.models import Category, Page, User
 
 from datetime import datetime
 
@@ -293,6 +293,7 @@ def suggest_category(request):
 
     return render(request, 'fungo/cats.html', {'cats': cats})
 
+@require_GET
 def user_page(request, user_name):
     """
     Display page describing particular user. If it's page of logged in user,
@@ -300,6 +301,46 @@ def user_page(request, user_name):
     """
     # TODO: write me, please
     return render(request, 'fungo/user_page.html', {'user_name': user_name})
+
+@require_GET
+def all_users(request):
+    """
+    Display page containing links to profiles of all Fungo users. This thing
+    is pagified and user can choose how many items will be displayed on a
+    page.
+
+    Parameters 'pagesize' and 'page' control result of the view.
+    """
+    users       = User.objects.all().order_by('username')
+    users_total = len(users)
+    context = {'user_number': len(users)}
+
+    try:
+        pagesize = int(request.GET.get('pagesize', 15))
+        page     = int(request.GET.get('page', 1))
+
+    except ValueError:
+        raise Http404
+
+    PAGE_RANGE = 3
+
+    start = pagesize * (page - 1)
+    end   = start + pagesize
+    pages_total = users_total // pagesize
+    if users_total % pagesize > 0:
+        pages_total += 1
+    context['users'] = users[start:end]
+    context['page'] = page
+    context['pages'] = [1]
+    context['pages'] += [i for i in range(page - PAGE_RANGE,
+                                          page + PAGE_RANGE + 1)
+                         if 1 < i < pages_total]
+    if pages_total != 1:
+        context['pages'] += [pages_total]
+    context['pagesize'] = pagesize
+    context['pagesizes'] = [15,30,50]
+
+    return render(request, 'fungo/all_users.html', context)
 
 @require_GET
 def track_url(request):

@@ -1,0 +1,67 @@
+{% extends 'fungo/base.html' %}
+{% load staticfiles %}
+{% block title %}
+  Fungo Users
+{% endblock title %}
+
+{% block title_stuff %}
+<span class="badge">{{ user_number }}</span>
+{% endblock title_stuff %}
+
+{% block content %}
+
+{% if users %}
+<ul class="list-group">
+  {% for user in users %}
+  <li class="list-group-item">
+    <a href="{% url 'user_page' user.username %}">
+      {{ user.username }}
+    </a>
+  </li>
+  {% endfor %}
+</ul>
+
+{% if pages|length > 1 %}
+<p>Pages</p>
+<div class="btn-group" role="group" aria-label="...">
+  {% for i in pages %}
+  <form action="{% url 'all_users' %}" style="display:inline">
+    <input type="hidden" name="page" value="{{ i }}" />
+    <input type="hidden" name="pagesize" value="{{ pagesize }}" />
+    <button type="submit"
+            class="btn
+                   {% if page == i %}
+                   btn-primary
+                   {% else %}
+                   btn-default
+                   {% endif %}">
+      {{ i }}
+    </button>
+  </form>
+  {% endfor %}
+</div>
+{% endif %}
+
+<p>Items on a page</p>
+<div class="btn-group" role="group" aria-label="...">
+  {% for i in pagesizes %}
+  <form action="{% url 'all_users' %}" style="display:inline">
+    <input type="hidden" name="pagesize" value="{{ i }}" />
+    <button type="submit"
+            class="btn
+                   {% if pagesize == i %}
+                   btn-primary
+                   {% else %}
+                   btn-default
+                   {% endif %}">
+      {{ i }}
+    </button>
+  </form>
+  {% endfor %}
+</div>
+
+{% else %}
+No users here!
+{% endif %}
+
+{% endblock content %}
